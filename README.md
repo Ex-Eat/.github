@@ -54,3 +54,41 @@ let Article = {
     price: number,
 }
 ```
+
+
+### DeliverService
+> Interaction with the MongoDB collection "Deliver" and CRUD for a deliver user.
+
+```ts
+let Deliver = {
+    deliver_user_id: double,
+    firstName: string,
+    lastName: string,
+    phoneNumber: string,
+    birthDate: dateTime,
+    termsOfUse: boolean,
+    location: {lat: float, lng: float, adress: string, name: string},
+    patronageCode: string,
+    notification: boolean,
+    moving_radius: number
+}
+```
+
+### OrderService
+> Interaction with the MongoDB collection "Order" for any user.
+
+```ts
+let Order = {
+    order_id: double,
+    restaurant: Restaurant,
+    client: Client,
+    deliver: Deliver,
+    status: Enum["à définir"],
+    order_datetime: Datetime,
+    in_order: [Article, Menu, ...],
+    delivery_location: {lat: float, lng: float, adress: string},
+    client_comment: string,
+    deliver_comment: string,
+    restaurant_comment: string,
+}
+```
