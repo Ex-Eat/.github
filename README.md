@@ -32,5 +32,25 @@ let Restaurant = {
     location: {lat: float, lng: float, adress: string, name: string},
     patronageCode: string,
     notification: boolean,
+    restaurant_image: ???,
+}
+```
+
+```ts
+let Menu = {
+    menu_id: double,
+    name: string,
+    menu_image: ???,
+    articles: [liste d'objets Article],
+    price: number,
+}
+```
+
+```ts
+let Article = {
+    article_id: double,
+    name: string,
+    article_image: ???,
+    price: number,
 }
 ```
