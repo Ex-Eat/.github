@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+  exeat.api-gateway:
+    container_name: 'exeat.api-gateway'
+    build: ./exeat.apiGateway
+    ports:
+      - "3005:3005"
+    links:
+      - exeat.boilerplate-service
+    environment:
+      - APP_ENV=PREPROD
+      - BOILERPLATE_SERVICE_PORT=8200
+      - BOILERPLATE_SERVICE_HOST=exeat.boilerplate-service
+  exeat.boilerplate-service:
+    container_name: 'exeat.boilerplate-service'
+    build: ./exeat.boilerplateService
+    ports:
+      - "8200:8200"
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+    environment:
+      - APP_ENV=PREPROD
+      - APP_PORT=8200
+      - APP_HOST=127.0.0.1
+      - APP_NAME=exeat.boilerplateService
+      - DB_HOST=mongodb
+      - DB_PORT=27017
+      - DB_NAME=exeat
+  mongodb:
+    container_name: 'mongodb'
+    image: mongo:latest
+    ports:
+      - "64000:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=exeat
+
+volumes:
+  mongo_data: {}
