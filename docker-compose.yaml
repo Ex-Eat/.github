@@ -4,40 +4,138 @@ services:
   exeat.api-gateway:
     container_name: 'exeat.api-gateway'
     build: ./exeat.apiGateway
+    networks:
+      - dev_network
     ports:
-      - "3005:3005"
+      - "8002:8002"
     links:
-      - exeat.boilerplate-service
+      - exeat.template-service
     environment:
-      - APP_ENV=PREPROD
-      - BOILERPLATE_SERVICE_PORT=8200
-      - BOILERPLATE_SERVICE_HOST=exeat.boilerplate-service
-  exeat.boilerplate-service:
-    container_name: 'exeat.boilerplate-service'
-    build: ./exeat.boilerplateService
+      APP_ENV: PREPROD
+      APP_PORT: 8002
+      # ======================= MS PORTS AND HOSTS =======================
+      # template
+      TEMPLATE_SERVICE_PORT: 8299
+      TEMPLATE_SERVICE_HOST: exeat.template-service
+      # auth
+      AUTH_SERVICE_PORT: 8210
+      AUTH_SERVICE_HOST: exeat.auth-service
+      # client
+      CLIENT_SERVICE_PORT: 8211
+      CLIENT_SERVICE_HOST: exeat.client-service
+      # restaurant
+      RESTAURANT_SERVICE_PORT: 8212
+      RESTAURANT_SERVICE_HOST: exeat.restaurant-service
+      # deliver
+      DELIVER_SERVICE_PORT: 8213
+      DELIVER_SERVICE_HOST: exeat.deliver-service
+      # order
+      ORDER_SERVICE_PORT: 8214
+      ORDER_SERVICE_HOST: exeat.order-service
+      # payments
+      PAYMENT_SERVICE_PORT: 8215
+      PAYMENT_SERVICE_HOST: exeat.payment-service
+      # stats
+      DEV_SERVICE_PORT: 8216
+      DEV_SERVICE_HOST: exeat.stats-service
+      # patronage
+      PATRONAGE_SERVICE_PORT: 8217
+      PATRONAGE_SERVICE_HOST: exeat.patronage-service
+      # ===================================================================
+  exeat.template-service:
+    container_name: 'exeat.template-service'
+    networks:
+      dev_network:
+        ipv4_address: 172.22.0.99
+    build: ./exeat.templateService
     ports:
-      - "8200:8200"
+      - "8299:8299"
     links:
       - mongodb
     depends_on:
       - mongodb
     environment:
-      - APP_ENV=PREPROD
-      - APP_PORT=8200
-      - APP_HOST=127.0.0.1
-      - APP_NAME=exeat.boilerplateService
-      - DB_HOST=mongodb
-      - DB_PORT=27017
-      - DB_NAME=exeat
+      APP_ENV: PREPROD
+      APP_PORT: 8299
+      APP_HOST: 172.22.0.99
+      APP_NAME: exeat.templateService
+      DB_HOST: mongodb
+      DB_PORT: 27017
+      DB_NAME: exeat
+  exeat.client-service:
+    container_name: 'exeat.client-service'
+    networks:
+      dev_network:
+        ipv4_address: 172.22.0.11
+    build: ./exeat.clientService
+    ports:
+      - "8211:8211"
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+    environment:
+      APP_ENV: PREPROD
+      APP_PORT: 8211
+      APP_HOST: 172.22.0.11
+      APP_NAME: exeat.clientService
+      DB_HOST: mongodb
+      DB_PORT: 27017
+      DB_NAME: exeat
+
+  exeat.auth-service:
+    container_name: 'exeat.auth-service'
+    networks:
+      dev_network:
+        ipv4_address: 172.22.0.10
+    build: ./exeat.authService
+    ports:
+      - "8210:8210"
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+    environment:
+      APP_ENV: PREPROD
+      APP_PORT: 8210
+      APP_HOST: 172.22.0.10
+      APP_NAME: exeat.authService
+      DB_NAME: exeat
+      DB_HOST: postgresdb
+      DB_USER: postgres
+      DB_PASSWORD: root
+      DB_PORT: 5432
+
+  postgresdb:
+    container_name: 'postgres'
+    image: postgres:latest
+    networks:
+      - dev_network
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresql_data:/data/postgresdb
+    environment:
+      - POSTGRES_USER=postgres # The PostgreSQL user (useful to connect to the database)
+      - POSTGRES_PASSWORD=root # The PostgreSQL password (useful to connect to the database)
+      - POSTGRES_DB=exeat # The PostgreSQL default database (automatically created at first launch)
+
   mongodb:
     container_name: 'mongodb'
     image: mongo:latest
+    networks:
+      - dev_network
     ports:
       - "64000:27017"
     volumes:
-      - mongo_data:/data/db
+      - mongo_data:/data/mongodb
     environment:
-      - MONGO_INITDB_DATABASE=exeat
+      MONGO_INITDB_DATABASE: exeat
 
 volumes:
   mongo_data: {}
+  postgresql_data: {}
+
+networks:
+  dev_network:
+    name: "dev-sessions-network"
