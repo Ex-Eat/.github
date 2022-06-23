@@ -10,6 +10,9 @@ services:
       - "8002:8002"
     links:
       - exeat.template-service
+      - exeat.client-service
+      - exeat.restaurant-service
+      - exeat.auth-service
     environment:
       APP_ENV: PREPROD
       APP_PORT: 8002
@@ -62,6 +65,7 @@ services:
       DB_HOST: mongodb
       DB_PORT: 27017
       DB_NAME: exeat
+
   exeat.client-service:
     container_name: 'exeat.client-service'
     networks:
@@ -79,6 +83,29 @@ services:
       APP_PORT: 8211
       APP_HOST: 172.22.0.11
       APP_NAME: exeat.clientService
+      DB_HOST: mongodb
+      DB_PORT: 27017
+      DB_USERNAME: AzureDiamond
+      DB_PASSWORD: hunter2
+      DB_NAME: exeat
+
+  exeat.restaurant-service:
+    container_name: 'exeat.restaurant-service'
+    networks:
+      dev_network:
+        ipv4_address: 172.22.0.12
+    build: ./exeat.restaurantService
+    ports:
+      - "8212:8212"
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+    environment:
+      APP_ENV: PREPROD
+      APP_PORT: 8212
+      APP_HOST: 172.22.0.12
+      APP_NAME: exeat.restaurantService
       DB_HOST: mongodb
       DB_PORT: 27017
       DB_NAME: exeat
@@ -139,3 +166,6 @@ volumes:
 networks:
   dev_network:
     name: "dev-sessions-network"
+    ipam:
+      config:
+      - subnet: "172.22.0.0/24"
