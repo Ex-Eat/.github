@@ -27,7 +27,7 @@ let Restaurant = {
     _id: double,
     globalUserId: double,
     restaurantName: string,
-    professional_mail: string,
+    professionalMail: string,
     phoneNumber: string,
     termsOfUse: boolean,
     location: {lat: float, lng: float, address: string, name: string},
