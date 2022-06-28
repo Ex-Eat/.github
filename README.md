@@ -7,7 +7,8 @@
 
 ```ts
 let Client = {
-    client_user_id: double,
+    _id: double,
+    globalUserId: double,
     firstName: string,
     lastName: string,
     phoneNumber: string,
@@ -24,23 +25,24 @@ let Client = {
 
 ```ts
 let Restaurant = {
-    restaurant_user_id: double,
-    restaurant_name: string,
+    _id: double,
+    globalUserId: double,
+    restaurantName: string,
     professional_mail: string,
     phoneNumber: string,
     termsOfUse: boolean,
     location: {lat: float, lng: float, adress: string, name: string},
     patronageCode: string,
     notification: boolean,
-    restaurant_image: ???,
+    restaurantImage: ???,
 }
 ```
 
 ```ts
 let Menu = {
-    menu_id: double,
+    _id: double,
     name: string,
-    menu_image: ???,
+    menuImage: ???,
     articles: [liste d'objets Article],
     price: number,
 }
@@ -48,9 +50,9 @@ let Menu = {
 
 ```ts
 let Article = {
-    article_id: double,
+    _id: double,
     name: string,
-    article_image: ???,
+    articleImage: ???,
     price: number,
 }
 ```
@@ -61,7 +63,8 @@ let Article = {
 
 ```ts
 let Deliver = {
-    deliver_user_id: double,
+    _id: double,
+    globalUserId: double,
     firstName: string,
     lastName: string,
     phoneNumber: string,
@@ -70,7 +73,7 @@ let Deliver = {
     location: {lat: float, lng: float, adress: string, name: string},
     patronageCode: string,
     notification: boolean,
-    moving_radius: number
+    movingRadius: number
 }
 ```
 
@@ -79,16 +82,16 @@ let Deliver = {
 
 ```ts
 let Order = {
-    order_id: double,
+    _id: double,
     restaurant: Restaurant,
     client: Client,
     deliver: Deliver,
     status: Enum["à définir"],
-    order_datetime: Datetime,
-    in_order: [Article, Menu, ...],
-    delivery_location: {lat: float, lng: float, adress: string},
-    client_comment: string,
-    deliver_comment: string,
-    restaurant_comment: string,
+    orderDatetime: Datetime,
+    inOrder: [Article, Menu, ...],
+    deliveryLocation: {lat: float, lng: float, adress: string},
+    clientComment: string,
+    deliverComment: string,
+    restaurantComment: string,
 }
 ```
