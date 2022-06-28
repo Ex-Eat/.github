@@ -12,7 +12,6 @@ let Client = {
     firstName: string,
     lastName: string,
     phoneNumber: string,
-    birthDate: dateTime,
     termsOfUse: boolean,
     locations: [{lat: float, lng: float, address: string, name: string}, ...],
     patronageCode: string,
